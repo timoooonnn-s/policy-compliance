@@ -1,0 +1,42 @@
+# Fabric (SPBM/ISIS) consistency checks.
+# Applies only to devices tagged with the "fabric" group in the inventory CSV.
+#
+# As with the security pack: validate the patterns against your firmware's
+# `show running-config` output and your fabric design before enforcing.
+
+rules:
+  - id: FAB-001
+    description: SPBM config mode boot flag must be enabled
+    severity: critical
+    groups: [fabric]
+    match_present: '^boot config flags spbm-config-mode'
+
+  - id: FAB-002
+    description: SPBM instance must be configured
+    severity: critical
+    groups: [fabric]
+    match_present: '^spbm \d+'
+
+  - id: FAB-003
+    description: SPBM nick-name must be assigned
+    severity: high
+    groups: [fabric]
+    match_present: '^spbm \d+ nick-name'
+
+  - id: FAB-004
+    description: ISIS manual area must be configured
+    severity: high
+    groups: [fabric]
+    match_present: '^\s*manual-area '
+
+  - id: FAB-005
+    description: ISIS must be enabled
+    severity: critical
+    groups: [fabric]
+    match_present: '^router isis enable'
+
+  - id: FAB-006
+    description: ISIS system name should be set
+    severity: low
+    groups: [fabric]
+    match_present: '^\s*sys-name '

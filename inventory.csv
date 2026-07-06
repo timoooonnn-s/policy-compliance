@@ -1,0 +1,5 @@
+hostname,ip,groups
+core-01,10.0.0.1,fabric;core
+core-02,10.0.0.2,fabric;core
+edge-01,10.0.10.1,
+edge-02,10.0.10.2,
