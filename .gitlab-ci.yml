@@ -1,0 +1,50 @@
+# voss-audit pipeline
+#
+# - lint job:  validates inventory + policy files on merge requests and pushes
+#              to the default branch. No device access.
+# - audit job: connects to the switches. Runs on scheduled pipelines (set one
+#              up under CI/CD > Schedules, e.g. nightly) and on manual
+#              pipeline runs from the web UI.
+#
+# Required CI/CD variables (Settings > CI/CD > Variables, masked):
+#   VOSS_USERNAME, VOSS_PASSWORD
+#
+# The runner executing the audit job must be able to reach the switches'
+# management IPs over SSH (tag it accordingly if you use specific runners).
+
+stages:
+  - validate
+  - audit
+
+default:
+  image: python:3.12-slim
+  before_script:
+    - pip install --quiet .
+
+lint-policies:
+  stage: validate
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  script:
+    - voss-audit --lint --inventory inventory.csv --policies policies/
+
+compliance-audit:
+  stage: audit
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+    - if: $CI_PIPELINE_SOURCE == "web"
+  script:
+    - voss-audit
+        --inventory inventory.csv
+        --policies policies/
+        --junit report.xml
+        --workers 10
+        --fail-on high
+  artifacts:
+    when: always
+    reports:
+      junit: report.xml
+    paths:
+      - report.xml
+    expire_in: 30 days

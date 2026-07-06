@@ -1,0 +1,56 @@
+# Security hardening baseline for all VOSS/VSP devices.
+#
+# NOTE: `show running-config` only lists non-default settings. Verify each
+# pattern against the actual output of your firmware version and adjust -
+# these rules are a starting baseline, not a certified benchmark.
+
+rules:
+  - id: SEC-001
+    description: Telnet daemon must be disabled
+    severity: critical
+    match_absent: '^boot config flags telnetd'
+
+  - id: SEC-002
+    description: SSH daemon must be enabled
+    severity: critical
+    match_present: '^boot config flags sshd'
+
+  - id: SEC-003
+    description: FTP daemon must be disabled
+    severity: high
+    match_absent: '^boot config flags ftpd'
+
+  - id: SEC-004
+    description: TFTP daemon must be disabled
+    severity: high
+    match_absent: '^boot config flags tftpd'
+
+  - id: SEC-005
+    description: Web server must be HTTPS-only
+    severity: high
+    match_present: '^web-server secure-only'
+
+  - id: SEC-006
+    description: Default SNMP communities (public/private) must not exist
+    severity: critical
+    match_absent: '^snmp-server community (public|private)\b'
+
+  - id: SEC-007
+    description: SSH protocol version 2 only
+    severity: high
+    match_absent: '^ssh version (1|both)\b'
+
+  - id: SEC-008
+    description: CLI session timeout must be configured
+    severity: medium
+    match_present: '^cli timeout \d+'
+
+  - id: SEC-009
+    description: Login banner must be configured
+    severity: low
+    match_present: '^banner\b'
+
+  - id: SEC-010
+    description: Minimum password length must be enforced
+    severity: medium
+    match_present: '^password min-passwd-len \d+'

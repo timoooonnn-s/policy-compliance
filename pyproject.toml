@@ -1,0 +1,27 @@
+[project]
+name = "voss-audit"
+version = "0.1.0"
+description = "Policy compliance auditing for Extreme VOSS/VSP switches, built for GitLab CI"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "netmiko>=4.3",
+    "PyYAML>=6.0",
+]
+
+[project.scripts]
+voss-audit = "voss_audit.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+src = ["src", "tests"]
