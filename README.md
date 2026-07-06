@@ -14,7 +14,7 @@ changes device state.
 ## Quick start
 
 ```bash
-uv pip install --system .          # or: pip install .
+pip install .
 
 export VOSS_USERNAME=auditor
 export VOSS_PASSWORD=...
@@ -117,7 +117,10 @@ Setup:
 ## Development
 
 ```bash
-uv sync            # installs the package + dev deps into .venv
-uv run pytest      # toolkit's own tests (no network needed)
-uv run ruff check
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements-dev.txt
+pip install -e .
+
+pytest             # toolkit's own tests (no network needed)
+ruff check
 ```

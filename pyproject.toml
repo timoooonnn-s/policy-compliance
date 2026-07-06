@@ -12,18 +12,12 @@ dependencies = [
 [project.scripts]
 voss-audit = "voss_audit.cli:main"
 
-[dependency-groups]
-dev = [
-    "pytest>=8.0",
-    "ruff>=0.4",
-]
-
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
 
-[tool.hatch.build.targets.wheel]
-packages = ["src/voss_audit"]
+[tool.setuptools.packages.find]
+where = ["src"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

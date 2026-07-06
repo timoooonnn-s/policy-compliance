@@ -19,8 +19,7 @@ stages:
 default:
   image: python:3.12-slim
   before_script:
-    - pip install --quiet uv
-    - uv pip install --system --quiet .
+    - pip install --quiet .
 
 lint-policies:
   stage: validate
